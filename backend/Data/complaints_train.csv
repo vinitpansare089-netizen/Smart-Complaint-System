@@ -1,0 +1,184 @@
+text,category,priority
+No water in hostel since morning,Water,Medium
+Water leakage in bathroom near room 12,Water,Medium
+Drinking water tank is empty,Water,Medium
+Water tap broken in washroom,Water,Medium
+Water supply is very dirty and smells bad,Water,Medium
+Internet is not working in lab,Network,Medium
+WiFi disconnecting frequently in hostel,Network,Medium
+Campus wifi is too slow today,Network,Low
+No network signal in classroom,Network,Low
+Router not working in hostel block A,Network,Medium
+Electricity gone in hostel block B,Electricity,Medium
+Fan not working in room,Electricity,Low
+Light flickering in corridor,Electricity,Low
+Power cut since last night,Electricity,Medium
+AC not working in computer lab,Electricity,Medium
+Garbage not cleaned for 3 days,Cleanliness,Medium
+Dustbin overflow near canteen,Cleanliness,Medium
+Washroom is dirty and smells horrible,Cleanliness,Medium
+Corridor cleaning not done,Cleanliness,Low
+Mess area hygiene is very poor,Cleanliness,Medium
+Mess food quality is very bad today,Mess,Low
+Found insects in mess food,Mess,High
+Mess food is stale and causing stomach pain,Mess,High
+Water in mess is dirty,Mess,Medium
+Mess staff behavior is rude,Mess,Low
+Ragging happening in hostel at night,Safety,High
+Some seniors threatened me today,Safety,High
+Harassment issue in college campus,Safety,High
+Physical fight happened near gate,Safety,High
+Someone is stalking and following me,Safety,High
+Teacher not coming to class regularly,Academics,Low
+Lecture schedule is not followed,Academics,Low
+Subject notes not provided by faculty,Academics,Low
+Lab equipment not available for practical,Academics,Medium
+Project mentor not responding properly,Academics,Low
+Placement training sessions are not happening,Placements,Medium
+Companies are not visiting for placements,Placements,Medium
+Need guidance for internship opportunities,Placements,Low
+Placement cell not sharing updates,Placements,Low
+Resume review sessions not conducted,Placements,Low
+Washroom door lock is broken,Infrastructure,Low
+Classroom benches are broken,Infrastructure,Low
+Lift not working in building,Infrastructure,Medium
+Street lights not working in campus,Infrastructure,Medium
+Parking area is unsafe and dark,Infrastructure,Medium
+Fees portal not working properly,Fees,Medium
+Fee payment failed but money deducted,Fees,High
+Scholarship not credited yet,Fees,Medium
+Exam form submission error in portal,Fees,Medium
+Need fee receipt urgently,Fees,Low
+Lost my ID card inside campus,Other,Low
+Need help finding lost wallet,Other,Low
+My phone got stolen in library,Safety,High
+Unauthorized people entering hostel,Safety,High
+Emergency medical help needed for student,Safety,High
+"Ragging happening in hostel corridor at night",Safety,High
+
+"A student is threatening me and abusing me",Safety,High
+
+"Emergency! Student fainted in classroom need help",Safety,High
+
+"My phone was stolen from library table",Safety,High
+
+"Harassment issue near campus gate",Safety,High
+
+"There was a physical fight in hostel block",Safety,High
+
+"Someone attacked my friend and he is injured",Safety,High
+
+"Unauthorized person entered girls hostel",Safety,High
+
+"I feel unsafe due to stalking in campus",Safety,High
+
+"Blood injury incident happened near canteen",Safety,High
+"I lost my ID card please help me",Other,Low
+
+"Need bonafide certificate urgently",Other,Low
+
+"Library card renewal request",Other,Low
+
+"Password reset required for student portal",Other,Low
+
+"Need exam timetable PDF",Academics,Low
+
+"Request for fee receipt download",Fees,Low
+
+"Bus pass related query for students",Other,Low
+
+"Need information about holiday list",Other,Low
+
+"Requesting permission letter for internship",Placements,Low
+
+"How to apply for scholarship form",Fees,Low
+"Lift not working from morning in main building",Infrastructure,Medium
+
+"No water supply in washroom second floor",Water,Medium
+
+"WiFi not working in classroom 105",Network,Medium
+
+"Street light is broken near parking area",Infrastructure,Medium
+
+"Electricity fluctuation in hostel room",Electricity,Medium
+
+"Washroom cleaning not done since yesterday",Cleanliness,Medium
+
+"Fan not working in computer lab",Electricity,Medium
+
+"Mess drinking water cooler not working",Mess,Medium
+
+"Garbage overflow near hostel gate",Cleanliness,Medium
+
+"Water leakage from ceiling in classroom",Infrastructure,Medium
+"Water pressure is too low in hostel washroom",Water,Medium
+"Water supply stopped in block C since evening",Water,Medium
+"Drinking water cooler is leaking",Water,Medium
+"Bathroom tap is not working properly",Water,Medium
+"Water pipe burst near hostel entrance",Water,Medium
+
+"WiFi not connecting in library area",Network,Medium
+"Internet speed is very slow in lab",Network,Medium
+"Mobile network is not available in classroom",Network,Low
+"Campus WiFi login not working",Network,Low
+"Router needs restart in hostel block D",Network,Medium
+
+"Switch board is damaged in my room",Electricity,Medium
+"Light not working in classroom 201",Electricity,Low
+"Frequent power cuts in hostel at night",Electricity,Medium
+"Fan making noise and not rotating",Electricity,Low
+"Charging points not working in lab",Electricity,Medium
+
+"Classroom is not cleaned properly",Cleanliness,Medium
+"Garbage collection is irregular in hostel",Cleanliness,Medium
+"Washroom cleaning staff not coming daily",Cleanliness,Medium
+"Bad smell in corridor due to trash",Cleanliness,Medium
+"Campus ground is full of waste and plastic",Cleanliness,Medium
+
+"Mess food is cold and tasteless today",Mess,Low
+"Mess food contains hair and is unhygienic",Mess,High
+"Water dispenser in mess is not working",Mess,Medium
+"Mess plates are dirty and oily",Mess,Medium
+"Mess staff arguing with students",Mess,Low
+
+"Faculty is not explaining concepts properly",Academics,Low
+"Class timings changed without notice",Academics,Low
+"Lab experiment instructions are not clear",Academics,Medium
+"Need extra classes for difficult subject",Academics,Low
+"Project evaluation feels unfair",Academics,Low
+
+"Placement cell is not responding to emails",Placements,Low
+"Internship opportunities are not being shared",Placements,Low
+"Need mock interview sessions for placement",Placements,Low
+"Not getting updates about upcoming companies",Placements,Low
+"Placement training schedule is confusing",Placements,Low
+
+"Classroom projector is not working",Infrastructure,Medium
+"Lift is stuck on second floor",Infrastructure,High
+"Benches are broken and unsafe to sit",Infrastructure,Medium
+"Ceiling is leaking during rain in class",Infrastructure,Medium
+"Hostel room door lock is broken",Infrastructure,Medium
+
+"Fee receipt is not generated after payment",Fees,High
+"Scholarship portal shows error while applying",Fees,Medium
+"Need installment option for fee payment",Fees,Low
+"Exam fee is showing double amount",Fees,Medium
+"Refund request not processed yet",Fees,Medium
+
+"Lost my college ID card near canteen",Other,Low
+"Need bonafide certificate for scholarship",Other,Low
+"Bus facility timing information required",Other,Low
+"Library book issue and return date confusion",Other,Low
+"Need help finding lost umbrella",Other,Low
+
+"Fuse is blown in hostel room switchboard",Electricity,Medium
+"MCB tripped and no power in my room",Electricity,Medium
+"Short circuit smell from switch board",Electricity,High
+"Electric socket spark is coming",Electricity,High
+"Voltage fluctuation damaged the charger",Electricity,Medium
+
+"MCB tripped again and again in my room",Electricity,Medium
+"Socket is sparking while charging phone",Electricity,High
+"Switchboard is burnt and smells like smoke",Electricity,High
+"Voltage fluctuation caused laptop to shut down",Electricity,Medium
+"Power supply is unstable and lights are flickering",Electricity,Medium
