@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Admin from "./pages/admin";
+import UserPage from "./pages/UserPage";
 
 function App() {
-  const [msg, setMsg] = useState("Loading...");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/health")
-      .then(res => res.json())
-      .then(data => setMsg(data.message))
-      .catch(() => setMsg("Backend not reachable"));
-  }, []);
-
-  return <h1>{msg}</h1>;
+  return (
+    <Routes>
+      <Route path="/" element={<UserPage />} />
+      <Route path="/admin" element={<Admin />} />
+    </Routes>
+  );
 }
 
 export default App;
