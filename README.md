@@ -1,16 +1,28 @@
-# Smart Complaint System
+# Smart Complaint Management System 🚀
 
-A full-stack AI-powered complaint classification system.
+AI-powered complaint handling system with analytics and admin workflow.
 
 ## Features
-- Complaint category prediction
 - Emotion detection
-- Priority classification
+- Urgency scoring
+- Smart assignment
+- Admin login
+- Analytics dashboard
+- Status management
 
 ## Tech Stack
-- FastAPI (Backend)
-- React + Vite (Frontend)
-- Machine Learning (NLP)
+- Frontend: React + Vite
+- Backend: FastAPI
+- Database: MongoDB
+- ML: scikit-learn, TF-IDF
 
-## Status
-In development
+## How to Run
+
+### Backend
+```bash
+uvicorn main:app --reload
+
+
+##Frontend
+npm install
+npm run dev
