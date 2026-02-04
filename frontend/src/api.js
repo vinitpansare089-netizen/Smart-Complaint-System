@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:8000";
 
-/* Submit complaint (User) */
+/* Submit */
 export async function submitComplaint(formData) {
   const res = await fetch(`${API_URL}/complaint`, {
     method: "POST",
@@ -13,8 +13,15 @@ export async function submitComplaint(formData) {
   return res.json();
 }
 
-/* Fetch all complaints (Admin) */
+/* Fetch */
 export async function fetchComplaints() {
-  const res = await fetch(`${API_URL}/complaint`);
+  const res = await fetch(`${API_URL}/complaints`);
   return res.json();
+}
+
+/* Update Status */
+export async function updateStatus(id, status) {
+  await fetch(`${API_URL}/complaint/${id}/status?status=${status}`, {
+    method: "PUT",
+  });
 }
