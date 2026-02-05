@@ -47,11 +47,15 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # allow all in production
+    allow_origins=[
+        "http://localhost:5173",
+        "https://smart-complaint-system-tawny.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # ===============================
