@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:8000"; // change after deployment
+const API_URL = "https://smart-complaint-system-kiit.onrender.com"; 
 
 function UserPage() {
   const [form, setForm] = useState({
