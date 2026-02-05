@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
-from db import complaints_collection
+from backend.db import complaints_collection
+from backend.db import Responsible_faculty
 from bson import ObjectId
 from datetime import datetime, timezone, timedelta
 from sklearn.metrics.pairwise import cosine_similarity
-from db import Responsible_faculty
 import uuid
 from fastapi import HTTPException
 
