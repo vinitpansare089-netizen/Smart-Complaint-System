@@ -1,6 +1,5 @@
 const API_URL = "https://smart-complaint-system-kiit.onrender.com";
 
-
 /* Submit */
 export async function submitComplaint(formData) {
   const res = await fetch(`${API_URL}/complaint`, {
