@@ -72,6 +72,14 @@ class StatusUpdate(BaseModel):
 # HEALTH CHECK
 # ===============================
 
+@app.get("/")
+def home():
+    return {
+        "status": "OK",
+        "message": "Smart Complaint System API is running"
+    }
+
+
 @app.get("/health")
 def health():
     return {
