@@ -10,40 +10,43 @@ import joblib
 from bson import ObjectId
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Local imports (important for Render)
+# Local DB imports
 from .db import complaints_collection, Responsible_faculty
 
 
-# ===============================
-# PATH SETUP (VERY IMPORTANT)
-# ===============================
+# ==================================================
+# PATH SETUP (LINUX SAFE)
+# ==================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(BASE_DIR, "Models")
+
+# MUST MATCH TRAINING FOLDER NAME (lowercase)
+MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 
 def load_model(filename: str):
+
     path = os.path.join(MODEL_DIR, filename)
 
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Model file missing: {path}")
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f"❌ Missing model file: {path}")
 
     return joblib.load(path)
 
 
-# ===============================
+# ==================================================
 # ADMIN CONFIG
-# ===============================
+# ==================================================
 
 ADMIN_EMAIL = "admin@college.com"
 ADMIN_PASSWORD = "admin123"
 
 
-# ===============================
-# APP INIT
-# ===============================
+# ==================================================
+# FASTAPI INIT
+# ==================================================
 
-app = FastAPI()
+app = FastAPI(title="Smart Complaint System API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -53,9 +56,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===============================
-# DATA MODELS
-# ===============================
+
+# ==================================================
+# REQUEST MODELS
+# ==================================================
 
 class Complaint(BaseModel):
     student_name: str
@@ -68,31 +72,28 @@ class StatusUpdate(BaseModel):
     status: str
 
 
-# ===============================
-# HEALTH CHECK
-# ===============================
+# ==================================================
+# HEALTH
+# ==================================================
 
 @app.get("/")
 def home():
-    return {
-        "status": "OK",
-        "message": "Smart Complaint System API is running"
-    }
+    return {"status": "OK", "message": "API Running"}
 
 
 @app.get("/health")
 def health():
-    return {
-        "status": "OK",
-        "message": "Backend is running... VINIT!"
-    }
+    return {"status": "OK", "message": "Backend Healthy"}
 
 
-# ===============================
-# LOAD ML MODELS
-# ===============================
+# ==================================================
+# LOAD ML MODELS (ON STARTUP)
+# ==================================================
 
 try:
+
+    print("📦 Loading ML models from:", MODEL_DIR)
+
     vectorizer_category = load_model("vectorizer_category.pkl")
     category_model = load_model("category_model.pkl")
 
@@ -102,23 +103,33 @@ try:
     emotion_vectorizer = load_model("emotion_vectorizer.pkl")
     emotion_model = load_model("emotion_model.pkl")
 
+    # Safety check
+    assert hasattr(vectorizer_category, "idf_")
+    assert hasattr(vectorizer_priority, "idf_")
+    assert hasattr(emotion_vectorizer, "idf_")
+
     print("✅ All ML models loaded successfully")
 
 except Exception as e:
-    print("❌ Model loading failed:", e)
-    raise e
+
+    print("❌ MODEL LOADING FAILED:", e)
+
+    raise RuntimeError("Server stopped: ML models missing")
 
 
-# ===============================
+# ==================================================
 # ML HELPERS
-# ===============================
+# ==================================================
 
 def predict_category(text: str) -> str:
+
     X = vectorizer_category.transform([text])
+
     return str(category_model.predict(X)[0])
 
 
 def safety_override(text: str) -> bool:
+
     danger_words = [
         "ragging", "harass", "harassment", "threat", "attack",
         "injury", "blood", "stolen", "emergency", "fight",
@@ -126,6 +137,7 @@ def safety_override(text: str) -> bool:
     ]
 
     text = text.lower()
+
     return any(w in text for w in danger_words)
 
 
@@ -135,17 +147,20 @@ def predict_priority(text: str) -> str:
         return "High"
 
     X = vectorizer_priority.transform([text])
+
     return str(priority_model.predict(X)[0])
 
 
 def predict_emotion(text: str) -> str:
+
     X = emotion_vectorizer.transform([text])
+
     return str(emotion_model.predict(X)[0])
 
 
-# ===============================
-# URGENCY SCORING
-# ===============================
+# ==================================================
+# URGENCY SCORE
+# ==================================================
 
 def urgency_score(text, category, priority, emotion):
 
@@ -154,7 +169,7 @@ def urgency_score(text, category, priority, emotion):
     # Priority
     if priority == "High":
         score += 40
-    elif priority == "medium":
+    elif priority.lower() == "medium":
         score += 25
     else:
         score += 10
@@ -173,25 +188,23 @@ def urgency_score(text, category, priority, emotion):
     else:
         score += 5
 
-    # Risky words
+    # Keywords
     danger_words = [
         "ragging", "harass", "harassment", "threat", "attack",
         "injury", "blood", "stolen", "emergency", "fight",
         "unsafe", "stalking", "abuse", "abusive", "bully",
-        "fire", "spark", "burning"
+        "fire", "burning", "spark"
     ]
 
-    text = text.lower()
-
-    if any(w in text for w in danger_words):
+    if any(w in text.lower() for w in danger_words):
         score += 10
 
     return min(score, 100)
 
 
-# ===============================
+# ==================================================
 # RISK DETECTION
-# ===============================
+# ==================================================
 
 def get_recent_complaints(hours=24, limit=100):
 
@@ -206,6 +219,7 @@ def get_recent_complaints(hours=24, limit=100):
 
 
 def compute_similarity(v1, v2):
+
     return cosine_similarity([v1], [v2])[0][0]
 
 
@@ -233,9 +247,9 @@ def detect_emerging_risk(current_vector):
     }
 
 
-# ===============================
+# ==================================================
 # AUTHORITY LOOKUP
-# ===============================
+# ==================================================
 
 def get_responsible_authority(department: str):
 
@@ -244,6 +258,7 @@ def get_responsible_authority(department: str):
     )
 
     if record:
+
         return {
             "role": record["role"],
             "name": record["name"]
@@ -255,9 +270,9 @@ def get_responsible_authority(department: str):
     }
 
 
-# ===============================
+# ==================================================
 # CREATE COMPLAINT
-# ===============================
+# ==================================================
 
 @app.post("/complaint")
 def create_complaint(c: Complaint):
@@ -266,7 +281,9 @@ def create_complaint(c: Complaint):
 
     text = f"{c.title} {c.description}"
 
-    vector = vectorizer_category.transform([text]).toarray()[0].tolist()
+    vec = vectorizer_category.transform([text])
+
+    vector = vec.toarray()[0].tolist()
 
     category = predict_category(text)
     priority = predict_priority(text)
@@ -277,19 +294,22 @@ def create_complaint(c: Complaint):
     assigned_to = get_responsible_authority(c.department)
 
     doc = {
+
         "reference_id": ref,
+
         "student_name": c.student_name,
         "department": c.department,
+
         "title": c.title,
         "description": c.description,
 
-        "emotion": emotion,
         "category": category,
         "priority": priority,
+        "emotion": emotion,
         "urgency": urgency,
 
-        "status": "Pending",
         "assigned_to": assigned_to,
+        "status": "Pending",
 
         "text_vector": vector,
         "created_at": datetime.now(timezone.utc)
@@ -298,16 +318,16 @@ def create_complaint(c: Complaint):
     complaints_collection.insert_one(doc)
 
     return {
-        "message": "Complaint submitted",
+        "message": "Complaint submitted successfully",
         "reference_id": ref,
         "assigned_to": assigned_to,
         "status": "Pending"
     }
 
 
-# ===============================
+# ==================================================
 # GET ALL COMPLAINTS
-# ===============================
+# ==================================================
 
 @app.get("/complaints")
 def get_complaints():
@@ -319,12 +339,16 @@ def get_complaints():
     for c in data:
 
         result.append({
+
             "id": str(c["_id"]),
+
             "reference_id": c.get("reference_id"),
+
             "student_name": c.get("student_name"),
+            "department": c.get("department"),
+
             "title": c.get("title"),
             "description": c.get("description"),
-            "department": c.get("department"),
 
             "category": c.get("category"),
             "priority": c.get("priority"),
@@ -343,9 +367,9 @@ def get_complaints():
     }
 
 
-# ===============================
+# ==================================================
 # UPDATE STATUS
-# ===============================
+# ==================================================
 
 @app.patch("/complaints/{cid}")
 def update_status(cid: str, s: StatusUpdate):
@@ -361,9 +385,9 @@ def update_status(cid: str, s: StatusUpdate):
     return {"message": "Status updated"}
 
 
-# ===============================
+# ==================================================
 # ADMIN LOGIN
-# ===============================
+# ==================================================
 
 @app.post("/admin/login")
 def admin_login(data: dict):
@@ -372,6 +396,7 @@ def admin_login(data: dict):
         data.get("email") == ADMIN_EMAIL and
         data.get("password") == ADMIN_PASSWORD
     ):
+
         return {
             "success": True,
             "token": "admin-secret-token"
