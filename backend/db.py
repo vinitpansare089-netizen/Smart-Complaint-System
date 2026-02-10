@@ -1,9 +1,9 @@
 import os
 from pymongo import MongoClient
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URL = os.getenv("MONGO_URL")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URL)
 
 db = client["smart_complaint_db"]
 
