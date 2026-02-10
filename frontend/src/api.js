@@ -1,4 +1,5 @@
-const API_URL = "https://smart-complaint-system-kiit.onrender.com";
+const API_URL = "http://127.0.0.1:8000";
+
 
 /* Submit */
 export async function submitComplaint(formData) {
