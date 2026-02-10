@@ -1,73 +1,92 @@
-### Training with jhonny lever and his machenics named loadkar and vinit 
-### enjoy the coding vinit.........
-
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
-##### Aye Load(kar) chal jaldi
-df = pd.read_csv('data/emotion_train.csv')
 
-#print(df.head(10))
-#print(df['emotion'].value_counts())
+# ===============================
+# PATH SETUP
+# ===============================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "models")
 
-##### Aim for target and shoot
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-X = df['text']
-Y = df['emotion']
 
-#### Aye chal ab train aur test krke tod(split) kar......
+# ===============================
+# LOAD DATA
+# ===============================
+df = pd.read_csv("data/emotion_train.csv")
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42, stratify = Y)
+print("Emotion distribution:\n", df["emotion"].value_counts())
 
-### Zara size to check kar - loadkar & vinit
 
-print("Train size: ",len(X_train))
-print("Test size: ", len(X_test))
+X = df["text"]
+Y = df["emotion"]
 
-### aye vinit check karna sare emotion training data me hai ya nhi...
-#Y_train.value_counts().plot(kind='bar',title='Train Emotion Distribution')
-#plt.show()
 
-#Y_test.value_counts().plot(kind='bar',title='Train Emotion Distribution')
-#plt.show()
+# ===============================
+# SPLIT
+# ===============================
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, Y,
+    test_size=0.2,
+    random_state=42,
+    stratify=Y
+)
 
-### TF-IDF ....
+
+print("Train size:", len(X_train))
+print("Test size:", len(X_test))
+
+
+# ===============================
+# VECTORIZER
+# ===============================
 vectorizer = TfidfVectorizer(
     lowercase=True,
     stop_words="english",
     ngram_range=(1, 2),
-    max_features=3000
+    max_features=5000
 )
+
 
 X_train_vec = vectorizer.fit_transform(X_train)
 X_test_vec = vectorizer.transform(X_test)
 
 print("Vector shape:", X_train_vec.shape)
 
-### Model Traininig start kar ab sab set hai(par vo nhi....)
+
+# ===============================
+# MODEL
+# ===============================
 model = LogisticRegression(
-    max_iter=1000,
-    class_weight='balanced'
+    max_iter=1500,
+    class_weight="balanced"
 )
 
-### ab fit kar de ...
 model.fit(X_train_vec, Y_train)
 
-### evaluate kar de sab kaam ho chuka hai...
+
+# ===============================
+# EVALUATION
+# ===============================
 y_pred = model.predict(X_test_vec)
 
-print("\n---- Classification Report ----")
+print("\n===== EMOTION REPORT =====")
 print(classification_report(Y_test, y_pred))
 
-print("\n---- Confusion Matrix ----")
+print("\n===== CONFUSION MATRIX =====")
 print(confusion_matrix(Y_test, y_pred))
 
-### ab kaam ko save kar de loadkar files bana de
 
-joblib.dump(vectorizer, "models/emotion_vectorizer.pkl")
-joblib.dump(model, "models/emotion_model.pkl")
+# ===============================
+# SAVE
+# ===============================
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "emotion_vectorizer.pkl"))
+joblib.dump(model, os.path.join(MODEL_DIR, "emotion_model.pkl"))
+
+print("\n✅ Emotion model saved successfully")

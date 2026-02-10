@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -6,105 +7,125 @@ from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
 
-df = pd.read_csv('Data/complaints_train.csv')
+# ===============================
+# PATH SETUP
+# ===============================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "models")
 
-#print(df.head(10))
-#print("Total Rows: ", len(df))
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+
+# ===============================
+# SAFETY OVERRIDE
+# ===============================
+def safety_override(text):
+
+    danger_words = [
+        "ragging", "harass", "harassment", "threat", "attack",
+        "injury", "blood", "stolen", "emergency", "fight",
+        "unsafe", "stalking", "abuse", "abusive", "bully"
+    ]
+
+    text = text.lower()
+    return any(w in text for w in danger_words)
+
+
+# ===============================
+# LOAD DATA
+# ===============================
+df = pd.read_csv("Data/complaints_train.csv")
 
 print("Total rows:", len(df))
-print(df["category"].value_counts())
+print("Category distribution:\n", df["category"].value_counts())
+print("Priority distribution:\n", df["priority"].value_counts())
 
-##Target and features###
 
 X = df["text"]
-Y_cat = df['category']
-Y_pri = df['priority']
-
-#print("X sample:")
-#print(X.head(3))
-
-#print("Y sample:")
-#print(Y.head(3))
-
-#print(df["priority"].value_counts())
-
-#print(df.isnull().sum())
-
-#print(df["category"].unique())
-#print(df["priority"].unique())
-
-## train test split ##
-
-X_train, X_test, Ycat_train, Ycat_test = train_test_split(X, Y_cat, random_state=42, test_size=0.2, stratify=Y_cat)
-#print("Total X rows:", len(X))
-X_train_p, X_test_p, Ypri_train, Ypri_test = train_test_split(X, Y_pri, test_size=0.2, random_state=42, stratify=Y_pri)
-
-#print("X_train:", len(X_train))
-#print("X_test:", len(X_test))
-
-### TF-IDF ###
-
-## CATEGORY VECTOR ##
-vectorizer_c = TfidfVectorizer(ngram_range=(1,2), stop_words='english')
-X_train_vec = vectorizer_c.fit_transform(X_train)
-X_test_vec = vectorizer_c.transform(X_test)
-
-## PRIORITY VECTOR ##
-vectorizer_p = TfidfVectorizer(ngram_range=(1,2))
-X_train_p_vec = vectorizer_p.fit_transform(X_train_p)
-X_test_p_vec = vectorizer_p.transform(X_test_p)
-
-#print('Priority Train:', len(X_train_p))
-#print('Priority Test:', len(X_test_p))
-
-#print("X_train_vec shape:", X_train_vec.shape)
-#print("X_test_vec shape:", X_test_vec.shape)
-
-##Taining of model using ALgorithms ##
-
-## CATEGORY MODEL ##
-cat_model = LogisticRegression(max_iter=3000, class_weight='balanced')
-cat_model.fit(X_train_vec, Ycat_train)
-
-cat_pred = cat_model.predict(X_test_vec)
-
-## PRIORITY MODEL ##
-pri_model = LogisticRegression(max_iter=2000, class_weight='balanced')
-pri_model.fit(X_train_p_vec, Ypri_train)
-
-pri_pred = pri_model.predict(X_test_p_vec)
-
-#print(cat_pred)
-
-### Evalution ###
-
-print('\n-------Classification report-----')
-print(classification_report(Ycat_test, cat_pred))
-
-print('\n------confusion matrix-------')
-print(confusion_matrix(Ycat_test, cat_pred))
-
-#print("\n-----PRIORITY CONFUSION MATRIX --------")
-#print(confusion_matrix(Ypri_test, pri_pred))
-
-#print("\n----PRIORITY CLASSIFICATION REPORT -----")
-#print(classification_report(Ypri_test, pri_pred))
-
-final_pred = []
-
-for text, pred in zip(X_test_p, pri_pred):
-    if safety_override(text):
-        final_pred.append("High")
-    else:
-        final_pred.append(pred)
-
-#print(confusion_matrix(Ypri_test, final_pred))
-#print(classification_report(Ypri_test, final_pred))
-
-joblib.dump(vectorizer_c, "models/vectorizer_category.pkl")
-joblib.dump(cat_model, "models/category_model.pkl")
+Y_cat = df["category"]
+Y_pri = df["priority"]
 
 
+# ===============================
+# SPLIT
+# ===============================
+X_train_c, X_test_c, Yc_train, Yc_test = train_test_split(
+    X, Y_cat,
+    test_size=0.2,
+    random_state=42,
+    stratify=Y_cat
+)
 
-joblib.dump(vectorizer_p, "models/vectorizer_priority.pkl")
-joblib.dump(pri_model, "models/priority_model.pkl")
+X_train_p, X_test_p, Yp_train, Yp_test = train_test_split(
+    X, Y_pri,
+    test_size=0.2,
+    random_state=42,
+    stratify=Y_pri
+)
+
+
+# ===============================
+# VECTORIZERS
+# ===============================
+
+vectorizer_c = TfidfVectorizer(
+    ngram_range=(1, 2),
+    stop_words="english",
+    max_features=6000
+)
+
+vectorizer_p = TfidfVectorizer(
+    ngram_range=(1, 2),
+    stop_words="english",
+    max_features=6000
+)
+
+
+Xc_train_vec = vectorizer_c.fit_transform(X_train_c)
+Xc_test_vec = vectorizer_c.transform(X_test_c)
+
+Xp_train_vec = vectorizer_p.fit_transform(X_train_p)
+Xp_test_vec = vectorizer_p.transform(X_test_p)
+
+
+# ===============================
+# MODELS
+# ===============================
+
+cat_model = LogisticRegression(
+    max_iter=3000,
+    class_weight="balanced"
+)
+
+pri_model = LogisticRegression(
+    max_iter=2000,
+    class_weight="balanced"
+)
+
+
+cat_model.fit(Xc_train_vec, Yc_train)
+pri_model.fit(Xp_train_vec, Yp_train)
+
+
+# ===============================
+# EVALUATION
+# ===============================
+
+print("\n===== CATEGORY REPORT =====")
+print(classification_report(Yc_test, cat_model.predict(Xc_test_vec)))
+
+print("\n===== PRIORITY REPORT =====")
+print(classification_report(Yp_test, pri_model.predict(Xp_test_vec)))
+
+
+# ===============================
+# SAVE MODELS (SAFE)
+# ===============================
+
+joblib.dump(vectorizer_c, os.path.join(MODEL_DIR, "vectorizer_category.pkl"))
+joblib.dump(cat_model, os.path.join(MODEL_DIR, "category_model.pkl"))
+
+joblib.dump(vectorizer_p, os.path.join(MODEL_DIR, "vectorizer_priority.pkl"))
+joblib.dump(pri_model, os.path.join(MODEL_DIR, "priority_model.pkl"))
+
+print("\n✅ Category & Priority models saved successfully")
