@@ -6,6 +6,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+
+
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware as StarletteCORS
+
+
 import joblib
 from bson import ObjectId
 from sklearn.metrics.pairwise import cosine_similarity
@@ -46,17 +52,22 @@ ADMIN_PASSWORD = "admin123"
 # FASTAPI INIT
 # ==================================================
 
-app = FastAPI(title="Smart Complaint System API")
+middleware = [
+    Middleware(
+        StarletteCORS,
+        allow_origins=[
+            "https://smart-complaint-system-tawny.vercel.app",
+            "http://localhost:5173",
+        ],
+        allow_methods=["*"],
+        allow_headers=["*"],
+        allow_credentials=False,
+    )
+]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://smart-complaint-system-tawny.vercel.app",
-        "http://localhost:5173"
-    ],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+app = FastAPI(
+    title="Smart Complaint System API",
+    middleware=middleware
 )
 
 
