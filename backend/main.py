@@ -50,8 +50,11 @@ app = FastAPI(title="Smart Complaint System API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,  # 👈 IMPORTANT
+    allow_origins=[
+        "https://smart-complaint-system-tawny.vercel.app",
+        "http://localhost:5173"
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
