@@ -47,10 +47,14 @@ ADMIN_PASSWORD = "admin123"
 # ==================================================
 
 app = FastAPI(title="Smart Complaint System API")
+origins = [
+    "https://smart-complaint-system-tawny.vercel.app",
+    "http://localhost:5173"
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
