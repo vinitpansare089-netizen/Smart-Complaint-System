@@ -1,0 +1,177 @@
+/* Spinner Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Smooth entrance animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input Focus States */
+input:focus,
+textarea:focus {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+/* Button Interactions */
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+/* Form Grid Responsive */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  /* Stack main grid */
+  .gridContainer {
+    grid-template-columns: 1fr !important;
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .leftPanel {
+    padding: 40px 24px !important;
+    min-height: 400px;
+  }
+  
+  .rightPanel {
+    padding: 40px 24px !important;
+  }
+  
+  /* Stack form fields */
+  .formGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 20px !important;
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    gap: 16px;
+    height: auto;
+    padding: 16px 0;
+  }
+  
+  .logo {
+    order: 2;
+  }
+  
+  .nav {
+    order: 1;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .navItem, .navItemActive {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Single column stats */
+  .statsGrid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+  
+  .leftPanel, .rightPanel {
+    padding: 32px 20px !important;
+  }
+  
+  .formTitle {
+    font-size: 24px !important;
+  }
+  
+  .infoTitle {
+    font-size: 28px !important;
+  }
+  
+  /* Logo adjustments */
+  .logoText {
+    display: none !important;
+  }
+  
+  .logoIcon {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .statCard {
+    padding: 16px 12px !important;
+  }
+  
+  .statNumber {
+    font-size: 20px !important;
+  }
+  
+  input, textarea, button {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+  }
+  
+  .button {
+    padding: 16px !important;
+  }
+}
+
+/* Additional Smooth Transitions */
+* {
+  transition: all 0.2s ease;
+}
+
+.leftPanel, .rightPanel {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.successCard {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
+}
