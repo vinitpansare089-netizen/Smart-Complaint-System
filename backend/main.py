@@ -20,9 +20,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from .db import complaints_collection, Responsible_faculty
 
 
-# ==================================================
 # PATH SETUP (LINUX SAFE)
-# ==================================================
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
