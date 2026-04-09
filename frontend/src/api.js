@@ -102,9 +102,9 @@ export async function submitComplaint(formData) {
   return res.json();
 }
 
-/* =========================
+/*
    ADMIN APIs
-========================= */
+
 
 /* Fetch Complaints (Admin) */
 export async function fetchComplaints() {
